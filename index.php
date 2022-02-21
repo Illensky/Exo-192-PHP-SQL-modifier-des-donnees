@@ -9,10 +9,53 @@
  */
 
 // TODO Votre code ici.
+
+require __DIR__ . '/Classes/Config.php';
+require __DIR__ . '/Classes/DBSingleton.php';
+
 try {
-    ...
+    $pdo = DBSingleton::PDO();
+
+    $stm = $pdo->prepare("
+        INSERT INTO user (nom, prenom, rue, numero, code_postal, ville, pays, mail)
+        VALUES (:nom, :prenom, :rue, :numero, :code_postal, :ville, :pays, :mail)
+    ");
+
+    $nom = 'Laroche';
+    $prenom = 'Alexis';
+    $rue = 'Rue d\'hirson';
+    $numero = 3;
+    $code_postal = '02830';
+    $ville = 'Saint-Michel';
+    $pays = 'France';
+    $mail = 'alexis.laroche.02240@gmail.com';
+
+    $stm->bindParam(':nom', $nom);
+    $stm->bindParam(':prenom', $prenom);
+    $stm->bindParam(':rue', $rue);
+    $stm->bindParam(':numero', $numero);
+    $stm->bindParam(':code_postal', $code_postal);
+    $stm->bindParam(':ville', $ville);
+    $stm->bindParam(':pays', $pays);
+    $stm->bindParam(':mail', $mail);
+
+    $stm->execute();
+
+    $stm = $pdo->prepare("
+        UPDATE user SET nom = :nom WHERE id = :id
+    ");
+
+    $nom = "Lerocher";
+    $id = 4;
+
+    $stm->bindParam(':nom', $nom);
+    $stm->bindParam(':id', $id);
+
+    $stm->execute();
 }
-catch...
+catch (PDOException $e) {
+    echo "Une erreur est survenue : " . $e->getMessage();
+}
 
 
 
